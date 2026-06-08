@@ -76,10 +76,10 @@
         
       </div>
 
-      <!-- Lado Direito -->
+     
       <div class="col-span-1 md:col-span-7 p-8 md:p-12 flex flex-col justify-center bg-forest-950/40 relative">
         
-        <!-- Login -->
+        
         <div id="form-login" class="space-y-6 page-transition">
           <div>
             <span class="text-xs font-mono uppercase tracking-widest text-forest-400">Bem-vindo de volta!</span>
@@ -214,7 +214,7 @@
 
       <div id="viewport" class="flex-1 p-8 overflow-y-auto custom-scrollbar">
         
-        <!-- DASHBOARD TAB -->
+      
         <div id="tab-dashboard" class="tab-content space-y-6 hidden">
           <div id="welcome-tutorial" class="cozy-glass p-6 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
             <div class="space-y-1">
@@ -261,7 +261,7 @@
           </div>
         </div>
 
-        <!-- MEUS LIVROS TAB -->
+     
         <div id="tab-meus-livros" class="tab-content space-y-6 hidden page-transition">
           <div class="flex items-center justify-between">
             <div><h3 class="font-serif text-2xl font-bold text-cozy-bege">Seu Acervo Literário</h3></div>
@@ -270,7 +270,7 @@
           <div id="grid-livros-catalogo" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
         </div>
 
-        <!-- PUBLICAR TAB -->
+  
         <div id="tab-publicar" class="tab-content max-w-3xl mx-auto bg-forest-900/20 border border-forest-800/50 p-8 rounded-2xl hidden page-transition">
           <div class="mb-6"><h3 class="font-serif text-2xl font-bold text-cozy-bege">Manifestar Obra</h3></div>
           <form id="js-publicar-form" class="space-y-5" onsubmit="handlePublicarLivro(event)">
@@ -285,7 +285,6 @@
           </form>
         </div>
 
-        <!-- FEEDBACKS TAB -->
         <div id="tab-feedbacks" class="tab-content space-y-6 hidden page-transition">
           <div><h3 class="font-serif text-2xl font-bold text-cozy-bege">Críticas Cultivadas</h3></div>
           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -296,7 +295,7 @@
           </div>
         </div>
 
-        <!-- FINANCEIRO TAB -->
+   
         <div id="tab-financeiro" class="tab-content space-y-6 hidden page-transition">
           <div><h3 class="font-serif text-2xl font-bold text-cozy-bege">Cofre de Royalties</h3></div>
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -307,7 +306,7 @@
           </div>
         </div>
 
-        <!-- PERFIL TAB -->
+      
         <div id="tab-perfil" class="tab-content max-w-3xl mx-auto bg-forest-900/20 border border-forest-800/50 p-8 rounded-2xl hidden page-transition">
           <div class="mb-6"><h3 class="font-serif text-2xl font-bold text-cozy-bege">Linhagem do Autor</h3></div>
           <form id="js-perfil-form" class="space-y-5" onsubmit="handleSalvarPerfil(event)">
@@ -327,7 +326,6 @@
           </form>
         </div>
 
-        <!-- IA DOCS TAB -->
         <div id="tab-ia-docs" class="tab-content max-w-4xl mx-auto space-y-6 hidden page-transition">
   <div class="flex items-center gap-3 border-b border-forest-900 pb-4">
     <div class="p-2 bg-forest-900 rounded-lg text-forest-400">
@@ -365,7 +363,7 @@
 </div>
 
 <script>
-  let tamanhoBaseFonte = 100; // Porcentagem inicial
+  let tamanhoBaseFonte = 100; // Porcentagem 
   
   function ajustarFonteLeitura(direcao) {
     tamanhoBaseFonte += (direcao * 5);
