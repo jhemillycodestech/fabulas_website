@@ -1,4 +1,4 @@
-// Constantes baseadas estritamente nas abas reais da sua imagem
+
 const ABA_USUARIOS = 'Cadastro_Usuarios';
 const ABA_LIVROS = 'Livros';
 const ABA_FEEDBACK = 'Feedback';
@@ -26,8 +26,7 @@ function getAppUrl() {
   return ScriptApp.getService().getUrl();
 }
 /**
- * GRAVA O NOVO GÊNERO DIRETAMENTE NA SUA ABA REAL 'Generos_Custom'
- */
+
 function salvarGeneroCustom(nomeGenero) {
   try {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -42,8 +41,7 @@ function salvarGeneroCustom(nomeGenero) {
 }
 
 /**
- * BUSCA LIVROS FILTRADOS COM STATUS 'Publicado' PARA A VITRINE DO LEITOR
- */
+
 function buscarLivrosLeitor() {
   try {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -70,9 +68,7 @@ function buscarLivrosLeitor() {
   }
 }
 
-/**
- * GRAVA O COMENTÁRIO NA ABA REAL 'Feedback' (SINGULAR)
- */
+
 function gravarFeedback(data) {
   try {
     const ss = SpreadsheetApp.getActiveSpreadsheet();
@@ -87,9 +83,7 @@ function gravarFeedback(data) {
   }
 }
 
-/**
- * BUSCA COMENTÁRIOS DA SUA ABA REAL 'Feedback'
- */
+
 function buscarFeedbacksDoLivro(livroId) {
   try {
     const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(ABA_FEEDBACK);
