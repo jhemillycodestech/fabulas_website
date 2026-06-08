@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Fábulas — Escreva, Inspire, Floresça</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;1,9..144,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            forest: {
+              50: '#f4f6f4', 100: '#e4eae4', 200: '#cbdad0', 400: '#7fa48f',
+              600: '#466856', 800: '#2c4237', 900: '#1b2a22', 950: '#0f1814'
+            },
+            cozy: { bege: '#fbf9f4', creme: '#f5efe4', terra: '#8c6239', argila: '#5c3a21' }
+          },
+          fontFamily: { sans: ['Inter', 'sans-serif'], serif: ['Fraunces', 'serif'] }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { background-color: #32875a; color: #fbf9f4; font-family: 'Inter', sans-serif; overflow-x: hidden; }
+    .cozy-glass {
+      background: rgba(44, 66, 55, 0.45);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .sidebar-active { background-color: rgba(127, 164, 143, 0.2); border-left: 3px solid #7fa48f; color: #fbf9f4; }
+    .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+    .custom-scrollbar::-webkit-scrollbar-track { background: #1b2a22; }
+    .custom-scrollbar::-webkit-scrollbar-thumb { background: #466856; border-radius: 10px; }
+    .loader {
+      border: 3px solid rgba(255,255,255,0.1); border-radius: 50%;
+      border-top: 3px solid #7fa48f; width: 24px; height: 24px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .page-transition { animation: fadeIn 0.4s ease-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body class="custom-scrollbar antialiased">
+
+
+  <div id="toast-container" class="fixed top-6 right-6 z-50 pointer-events-none flex flex-col gap-3"></div>
+
+
+  <div id="auth-screen" class="min-h-screen w-full flex items-center justify-center p-4 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-forest-800 via-forest-950 to-black">
+    <div class="w-full max-w-5xl h-[650px] cozy-glass rounded-3xl overflow-hidden shadow-2xl flex grid grid-cols-1 md:grid-cols-12">
+      
+   
+      <div class="hidden md:flex md:col-span-5 bg-gradient-to-br from-forest-900 to-forest-950 p-12 flex-col justify-between border-r border-white/5 relative overflow-hidden">
+        <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#7fa48f_1px,transparent_1px)] [background-size:16px_16px]"></div>
+        <div class="flex items-center gap-3 relative z-10">
+          <div class="w-10 h-10 rounded-xl bg-forest-600 flex items-center justify-center border border-forest-400/30">
+            <i data-lucide="feather" class="text-cozy-bege w-5 h-5"></i>
+          </div>
+          <span class="font-serif text-2xl font-semibold tracking-wide text-cozy-bege">Fábulas</span>
+        </div>
+        <div class="relative z-10">
+          <h2 class="font-serif text-3xl font-light leading-relaxed text-cozy-creme mb-4">"O refúgio digital para as mentes literárias mais puras da nossa era."</h2>
+          <p class="text-forest-400 text-sm font-light">— Publique, gerencie e floresça seu legacy.</p>
+        </div>
+        
+      </div>
+
+      <!-- Lado Direito -->
+      <div class="col-span-1 md:col-span-7 p-8 md:p-12 flex flex-col justify-center bg-forest-950/40 relative">
+        
+        <!-- Login -->
+        <div id="form-login" class="space-y-6 page-transition">
+          <div>
+            <span class="text-xs font-mono uppercase tracking-widest text-forest-400">Bem-vindo de volta!</span>
+            <h1 class="font-serif text-3xl font-bold mt-1 text-cozy-bege">Continue sua Jornada</h1>
+          </div>
+          <form id="js-login-form" class="space-y-4" onsubmit="handleLogin(event)">
+            <div>
+              <label class="block text-xs font-medium text-forest-200 mb-1.5 uppercase tracking-wider">Endereço de E-mail</label>
+              <input type="email" id="login-email" required class="w-full bg-forest-900/60 border border-forest-800 rounded-xl px-4 py-3 text-sm text-cozy-bege focus:outline-none focus:border-forest-400 transition-colors">
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-forest-200 mb-1.5 uppercase tracking-wider">Chave de Acesso (Senha)</label>
+              <input type="password" id="login-senha" required class="w-full bg-forest-900/60 border border-forest-800 rounded-xl px-4 py-3 text-sm text-cozy-bege focus:outline-none focus:border-forest-400 transition-colors">
+            </div>
+            <button type="submit" id="btn-login-submit" class="w-full bg-forest-600 hover:bg-forest-400 text-forest-950 font-semibold rounded-xl py-3.5 text-sm transition-all flex items-center justify-center gap-2">
+              <span>Iniciar Jornada</span> <i data-lucide="arrow-right" class="w-4 h-4"></i>
+            </button>
+          </form>
+          <p class="text-xs text-center text-forest-400">
+            Ainda não faz parte do círculo? <button onclick="toggleAuthForms(true)" class="text-forest-200 underline hover:text-cozy-bege transition-colors">Criar sua conta</button>
+          </p>
+        </div>
+
+        <div id="form-cadastro" class="space-y-6 hidden page-transition">
+          <div>
+            <span class="text-xs font-mono uppercase tracking-widest text-forest-400">Faça parte do ecossistema</span>
+            <h1 class="font-serif text-3xl font-bold mt-1 text-cozy-bege">Iniciar Linhagem</h1>
+          </div>
+          <form id="js-cadastro-form" class="space-y-4" onsubmit="handleCadastro(event)">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-medium text-forest-200 mb-1.5 uppercase tracking-wider">Nome Completo</label>
+                <input type="text" id="cad-nome" required class="w-full bg-forest-900/60 border border-forest-800 rounded-xl px-4 py-3 text-sm text-cozy-bege focus:outline-none focus:border-forest-400 transition-colors">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-forest-200 mb-1.5 uppercase tracking-wider">Pseudônimo</label>
+                <input type="text" id="cad-nick" required class="w-full bg-forest-900/60 border border-forest-800 rounded-xl px-4 py-3 text-sm text-cozy-bege focus:outline-none focus:border-forest-400 transition-colors">
+              </div>
+            </div>
+            <div>
+              <label class="block text-xs font-medium text-forest-200 mb-1.5 uppercase tracking-wider">E-mail</label>
+              <input type="email" id="cad-email" required class="w-full bg-forest-900/60 border border-forest-800 rounded-xl px-4 py-3 text-sm text-cozy-bege focus:outline-none focus:border-forest-400 transition-colors">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-medium text-forest-200 mb-1.5 uppercase tracking-wider">Senha</label>
+                <input type="password" id="cad-senha" required class="w-full bg-forest-900/60 border border-forest-800 rounded-xl px-4 py-3 text-sm text-cozy-bege focus:outline-none focus:border-forest-400 transition-colors">
+              </div>
+              <div>
+                <label class="block text-xs font-medium text-forest-200 mb-1.5 uppercase tracking-wider">Sua Vocação</label>
+                <select id="cad-tipo" class="w-full bg-forest-900/60 border border-forest-800 rounded-xl px-4 py-3 text-sm text-cozy-bege focus:outline-none focus:border-forest-400 transition-colors">
+                  <option class="bg-forest-950" value="Autor">Autor Independente</option>
+                  <option class="bg-forest-950" value="Leitor">Leitor Entusiasta</option>
+                </select>
+              </div>
+            </div>
+            <button type="submit" id="btn-cadastro-submit" class="w-full bg-forest-600 hover:bg-forest-400 text-forest-950 font-semibold rounded-xl py-3.5 text-sm transition-all flex items-center justify-center gap-2">
+              <span>Consolidar Cadastro</span> <i data-lucide="check" class="w-4 h-4"></i>
+            </button>
+          </form>
+          <p class="text-xs text-center text-forest-400">
+            Já possui assento no conselho? <button onclick="toggleAuthForms(false)" class="text-forest-200 underline hover:text-cozy-bege transition-colors">Fazer Login</button>
+          </p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <div id="main-app" class="hidden min-h-screen flex flex-col md:flex-row bg-forest-950">
+    
+
+    <aside class="w-full md:w-64 bg-forest-950 border-r border-forest-900/70 flex flex-col justify-between shrink-0">
+      <div>
+        <div class="p-6 border-b border-forest-900/50 flex items-center justify-between">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-forest-600 flex items-center justify-center">
+              <i data-lucide="feather" class="text-cozy-bege w-4 h-4"></i>
+            </div>
+            <span class="font-serif text-lg font-bold tracking-wide text-cozy-bege">Fábulas</span>
+          </div>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded bg-forest-900 text-forest-400">NATIVO</span>
+        </div>
+
+        <nav class="p-4 space-y-1">
+          <button onclick="switchTab('dashboard')" id="nav-dashboard" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-forest-400 hover:text-cozy-bege hover:bg-white/5 transition-all">
+            <i data-lucide="layout-dashboard" class="w-4 h-4"></i> Dashboard
+          </button>
+          <button onclick="switchTab('meus-livros')" id="nav-meus-livros" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-forest-400 hover:text-cozy-bege hover:bg-white/5 transition-all">
+            <i data-lucide="book-open" class="w-4 h-4"></i> Meus Livros
+          </button>
+          <button onclick="switchTab('publicar')" id="nav-publicar" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-forest-400 hover:text-cozy-bege hover:bg-white/5 transition-all">
+            <i data-lucide="file-plus-2" class="w-4 h-4"></i> Publicar Obra
+          </button>
+          <button onclick="switchTab('feedbacks')" id="nav-feedbacks" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-forest-400 hover:text-cozy-bege hover:bg-white/5 transition-all">
+            <i data-lucide="message-square" class="w-4 h-4"></i> Feedbacks
+          </button>
+          <button onclick="switchTab('financeiro')" id="nav-financeiro" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-forest-400 hover:text-cozy-bege hover:bg-white/5 transition-all">
+            <i data-lucide="coins" class="w-4 h-4"></i> Financeiro
+          </button>
+          <button onclick="switchTab('perfil')" id="nav-perfil" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium text-forest-400 hover:text-cozy-bege hover:bg-white/5 transition-all">
+            <i data-lucide="user" class="w-4 h-4"></i> Meu Perfil
+          </button>
+          <button onclick="switchTab('ia-docs')" id="nav-ia-docs" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-mono text-forest-400 bg-forest-900/30 border border-forest-800/30 hover:text-forest-200 transition-all">
+            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-forest-400"></i> Relatório de IA
+          </button>
+        </nav>
+      </div>
+
+      <div class="p-4 border-t border-forest-900/50 flex items-center justify-between">
+        <div class="flex items-center gap-3 overflow-hidden">
+          <img id="user-avatar-side" class="w-9 h-9 rounded-full border border-forest-800 object-cover bg-forest-900" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop">
+          <div class="truncate">
+            <p id="user-name-side" class="text-xs font-semibold text-cozy-bege truncate">Carregando...</p>
+            <p id="user-role-side" class="text-[10px] font-mono text-forest-400 uppercase">Autor</p>
+          </div>
+        </div>
+        <button onclick="logout()" class="p-2 text-forest-400 hover:text-red-400 rounded-lg transition-colors">
+          <i data-lucide="log-out" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col min-w-0 bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-forest-950 via-forest-950 to-forest-900/60">
+      <header class="h-16 border-b border-forest-900/50 px-8 flex items-center justify-between shrink-0">
+        <h2 id="page-title" class="font-serif text-xl font-semibold text-cozy-bege">Visão Geral</h2>
+        <div class="flex items-center gap-2 bg-forest-900/60 px-3 py-1.5 rounded-full border border-forest-800/60">
+          <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span class="text-[11px] font-mono text-forest-300">Google Sheets Conectado Nativamente</span>
+        </div>
+      </header>
+
+      <div id="viewport" class="flex-1 p-8 overflow-y-auto custom-scrollbar">
+        
+        <!-- DASHBOARD TAB -->
+        <div id="tab-dashboard" class="tab-content space-y-6 hidden">
+          <div id="welcome-tutorial" class="cozy-glass p-6 rounded-2xl flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="space-y-1">
+              <h3 class="font-serif text-xl font-bold text-cozy-bege">Seja bem-vindo à clareira do Fábulas, <span id="welcome-user-name" class="text-forest-200">Escritor</span>! 🍃</h3>
+              <p class="text-sm text-forest-300 font-light max-w-2xl">Os dados abaixo são puxados e calculados em tempo real diretamente da sua planilha Google Sheets.</p>
+            </div>
+            <button onclick="document.getElementById('welcome-tutorial').remove()" class="text-xs font-mono text-forest-400 hover:text-cozy-creme border border-forest-800 rounded-lg px-3 py-1.5 transition-colors">Ocultar Guia</button>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-forest-900/40 border border-forest-800/70 p-5 rounded-2xl flex items-center justify-between">
+              <div><p class="text-xs font-mono text-forest-400 uppercase">Leituras de Páginas</p><h4 id="metric-views" class="font-serif text-3xl font-bold text-cozy-bege mt-2">0</h4></div>
+              <div class="p-3 bg-forest-800/50 rounded-xl text-forest-400"><i data-lucide="eye" class="w-5 h-5"></i></div>
+            </div>
+            <div class="bg-forest-900/40 border border-forest-800/70 p-5 rounded-2xl flex items-center justify-between">
+              <div><p class="text-xs font-mono text-forest-400 uppercase">Cópias Vendidas</p><h4 id="metric-sales" class="font-serif text-3xl font-bold text-cozy-bege mt-2">0</h4></div>
+              <div class="p-3 bg-forest-800/50 rounded-xl text-forest-400"><i data-lucide="shopping-bag" class="w-5 h-5"></i></div>
+            </div>
+            <div class="bg-forest-900/40 border border-forest-800/70 p-5 rounded-2xl flex items-center justify-between">
+              <div><p class="text-xs font-mono text-forest-400 uppercase">Receita Líquida</p><h4 id="metric-revenue" class="font-serif text-3xl font-bold text-cozy-bege mt-2">R$ 0,00</h4></div>
+              <div class="p-3 bg-forest-800/50 rounded-xl text-forest-400"><i data-lucide="banknote" class="w-5 h-5"></i></div>
+            </div>
+            <div class="bg-forest-900/40 border border-forest-800/70 p-5 rounded-2xl flex items-center justify-between">
+              <div><p class="text-xs font-mono text-forest-400 uppercase">Avaliação Média</p><h4 id="metric-rating" class="font-serif text-3xl font-bold text-cozy-bege mt-2">5.0</h4></div>
+              <div class="p-3 bg-forest-800/50 rounded-xl text-forest-400"><i data-lucide="star" class="w-5 h-5"></i></div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            <div class="lg:col-span-8 bg-forest-900/30 border border-forest-800/50 p-6 rounded-2xl">
+              <div class="h-64"><canvas id="chart-performance"></canvas></div>
+            </div>
+            <div class="lg:col-span-4 bg-forest-900/30 border border-forest-800/50 p-6 rounded-2xl flex flex-col justify-between">
+              <div><h3 class="font-serif text-lg font-medium text-cozy-bege mb-4">Crônicas Recentes</h3><div id="wrapper-atividade" class="space-y-4"></div></div>
+            </div>
+          </div>
+
+          <div class="bg-forest-900/20 border border-forest-800/50 rounded-2xl overflow-hidden">
+            <div class="p-5 border-b border-forest-900/70 flex items-center justify-between"><h3 class="font-serif text-lg font-medium text-cozy-bege">Portfólio Ativo</h3></div>
+            <div class="overflow-x-auto"><table class="w-full text-left text-sm">
+              <thead><tr class="border-b border-forest-900 bg-forest-950/40 text-forest-400 font-mono text-xs"><th class="p-4">CÓDIGO ID</th><th class="p-4">TÍTULO</th><th class="p-4">GÊNERO</th><th class="p-4">STATUS</th><th class="p-4 text-right">PREÇO</th></tr></thead>
+              <tbody id="table-dashboard-books"></tbody>
+            </table></div>
+          </div>
+        </div>
+
+        <!-- MEUS LIVROS TAB -->
+        <div id="tab-meus-livros" class="tab-content space-y-6 hidden page-transition">
+          <div class="flex items-center justify-between">
+            <div><h3 class="font-serif text-2xl font-bold text-cozy-bege">Seu Acervo Literário</h3></div>
+            <button onclick="switchTab('publicar')" class="bg-forest-600 hover:bg-forest-400 text-forest-950 font-semibold px-4 py-2 rounded-xl text-sm flex items-center gap-2 transition-all"><i data-lucide="plus" class="w-4 h-4"></i> Semear História</button>
+          </div>
+          <div id="grid-livros-catalogo" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </div>
+
+        <!-- PUBLICAR TAB -->
+        <div id="tab-publicar" class="tab-content max-w-3xl mx-auto bg-forest-900/20 border border-forest-800/50 p-8 rounded-2xl hidden page-transition">
+          <div class="mb-6"><h3 class="font-serif text-2xl font-bold text-cozy-bege">Manifestar Obra</h3></div>
+          <form id="js-publicar-form" class="space-y-5" onsubmit="handlePublicarLivro(event)">
+            <div><label class="block text-xs font-mono uppercase text-forest-300 mb-1.5">Título</label><input type="text" id="pub-titulo" required class="w-full bg-forest-950/80 border border-forest-800 rounded-xl px-4 py-3 text-sm text-cozy-bege focus:outline-none focus:border-forest-400"></div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div><label class="block text-xs font-mono uppercase text-forest-300 mb-1.5">Gênero</label><select id="pub-genero" class="w-full bg-forest-950/80 border border-forest-800 rounded-xl px-4 py-3 text-sm text-cozy-bege focus:outline-none focus:border-forest-400"><option value="Alta Fantasia">Alta Fantasia</option><option value="Poesia">Poesia</option><option value="Romance">Romance Cozy</option><option value="__NOVO__" class="text-emerald-400 font-semibold">+ Adicionar Novo Gênero</option> </select></div>
+              <div><label class="block text-xs font-mono uppercase text-forest-300 mb-1.5">Preço (R$)</label><input type="number" step="0.01" id="pub-preco" required class="w-full bg-forest-950/80 border border-forest-800 rounded-xl px-4 py-3 text-sm text-cozy-bege focus:outline-none focus:border-forest-400"></div>
+            </div>
+            <div><label class="block text-xs font-mono uppercase text-forest-300 mb-1.5">Status Inicial</label><select id="pub-status" class="w-full bg-forest-950/80 border border-forest-800 rounded-xl px-4 py-3 text-sm text-cozy-bege focus:outline-none focus:border-forest-400"><option value="Publicado">Publicado</option><option value="Em Rascunho">Em Rascunho</option></select></div>
+            <div><label class="block text-xs font-mono uppercase text-forest-300 mb-1.5">Sinopse</label><textarea id="pub-sinopse" rows="4" required class="w-full bg-forest-950/80 border border-forest-800 rounded-xl px-4 py-3 text-sm text-cozy-bege focus:outline-none focus:border-forest-400 custom-scrollbar"></textarea></div>
+            <button type="submit" id="btn-publicar-submit" class="w-full bg-forest-600 hover:bg-forest-400 text-forest-950 font-semibold rounded-xl py-3.5 text-sm transition-all flex items-center justify-center gap-2"><span>Gravar Linha na Planilha</span><i data-lucide="send" class="w-4 h-4"></i></button>
+          </form>
+        </div>
+
+        <!-- FEEDBACKS TAB -->
+        <div id="tab-feedbacks" class="tab-content space-y-6 hidden page-transition">
+          <div><h3 class="font-serif text-2xl font-bold text-cozy-bege">Críticas Cultivadas</h3></div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="bg-forest-900/30 border border-forest-800/40 p-5 rounded-xl space-y-2">
+              <div class="flex items-center justify-between"><span class="font-semibold text-cozy-bege text-sm">Mariana Costa</span><div class="flex text-amber-400"><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i><i data-lucide="star" class="w-3 h-3 fill-current"></i></div></div>
+              <p class="text-xs text-forest-300 italic">"Conexão perfeita com as raízes da história."</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- FINANCEIRO TAB -->
+        <div id="tab-financeiro" class="tab-content space-y-6 hidden page-transition">
+          <div><h3 class="font-serif text-2xl font-bold text-cozy-bege">Cofre de Royalties</h3></div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-gradient-to-br from-forest-900/80 to-forest-950 p-6 rounded-2xl border border-forest-800">
+              <span class="text-xs font-mono text-forest-400 uppercase">Saldo Consolidado</span>
+             <h4 id="metric-royalties-real" class="font-serif text-3xl font-bold text-emerald-400 mt-2">R$ 0,00</h4>
+            </div>
+          </div>
+        </div>
+
+        <!-- PERFIL TAB -->
+        <div id="tab-perfil" class="tab-content max-w-3xl mx-auto bg-forest-900/20 border border-forest-800/50 p-8 rounded-2xl hidden page-transition">
+          <div class="mb-6"><h3 class="font-serif text-2xl font-bold text-cozy-bege">Linhagem do Autor</h3></div>
+          <form id="js-perfil-form" class="space-y-5" onsubmit="handleSalvarPerfil(event)">
+            <div class="flex items-center gap-6 p-4 bg-forest-950/40 rounded-xl border border-forest-900">
+              <img id="profile-avatar-preview" class="w-16 h-16 rounded-full object-cover border border-forest-700 bg-forest-900" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=256&auto=format&fit=crop">
+              <div class="flex-1">
+                <label class="block text-xs font-mono text-forest-300 uppercase mb-1">URL do Avatar</label>
+                <input type="text" id="prof-foto" onchange="document.getElementById('profile-avatar-preview').src = this.value" class="w-full bg-forest-950 border border-forest-800 rounded-xl px-3 py-2 text-xs text-cozy-bege focus:outline-none focus:border-forest-400">
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div><label class="block text-xs font-mono uppercase text-forest-300 mb-1.5">Identidade</label><input type="text" id="prof-nome" required class="w-full bg-forest-950/80 border border-forest-800 rounded-xl px-4 py-3 text-sm text-cozy-bege focus:outline-none focus:border-forest-400"></div>
+              <div><label class="block text-xs font-mono uppercase text-forest-300 mb-1.5">Pseudônimo</label><input type="text" id="prof-nick" required class="w-full bg-forest-950/80 border border-forest-800 rounded-xl px-4 py-3 text-sm text-cozy-bege focus:outline-none focus:border-forest-400"></div>
+            </div>
+            <div><label class="block text-xs font-mono uppercase text-forest-300 mb-1.5">Biografia</label><textarea id="prof-bio" rows="4" class="w-full bg-forest-950/80 border border-forest-800 rounded-xl px-4 py-3 text-sm text-cozy-bege focus:outline-none focus:border-forest-400 custom-scrollbar"></textarea></div>
+            <button type="submit" id="btn-perfil-submit" class="w-full bg-forest-600 hover:bg-forest-400 text-forest-950 font-semibold rounded-xl py-3.5 text-sm transition-all flex items-center justify-center gap-2"><span>Sincronizar Perfil</span><i data-lucide="save" class="w-4 h-4"></i></button>
+          </form>
+        </div>
+
+        <!-- IA DOCS TAB -->
+        <div id="tab-ia-docs" class="tab-content max-w-4xl mx-auto space-y-6 hidden page-transition">
+  <div class="flex items-center gap-3 border-b border-forest-900 pb-4">
+    <div class="p-2 bg-forest-900 rounded-lg text-forest-400">
+      <i data-lucide="sparkles" class="w-6 h-6 text-emerald-400"></i>
+    </div>
+    <div>
+      <h3 class="font-serif text-2xl font-bold text-cozy-bege">Análise Estratégica de IA</h3>
+      <p class="text-xs text-forest-400 font-mono">GERADO EM TEM REAL COM BASE NAS ABAS DO SHEETS</p>
+    </div>
+  </div>
+
+  <div class="bg-gradient-to-r from-forest-900/40 to-emerald-950/20 border border-emerald-500/20 p-6 rounded-2xl space-y-4">
+    <h4 class="text-sm font-semibold text-emerald-400 flex items-center gap-2">
+      <i data-lucide="trending-up" class="w-4 h-4"></i> Diagnóstico de Performance Literária
+    </h4>
+    <p class="text-sm text-forest-200 font-light leading-relaxed">
+      "Detectamos um aumento de <strong>24% nas leituras</strong> do gênero <em>Alta Fantasia</em> esta semana. Cruzando estes dados com seu Cofre de Royalties, recomendamos antecipar o lançamento do rascunho do seu próximo livro para maximizar o retorno financeiro."
+    </p>
+  </div>
+</div>
+
+      </div>
+    </main>
+  </div>
+
+  <div class="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-2 group">
+  <div id="box-accessibility" class="cozy-glass p-2 rounded-xl flex items-center gap-3 shadow-xl hidden transition-all">
+    <button onclick="ajustarFonteLeitura(1)" class="w-8 h-8 rounded-lg bg-forest-900 text-cozy-bege hover:bg-forest-600 text-xs font-bold" title="Aumentar Fonte">A+</button>
+    <button onclick="ajustarFonteLeitura(-1)" class="w-8 h-8 rounded-lg bg-forest-900 text-cozy-bege hover:bg-forest-600 text-xs font-bold" title="Diminuir Fonte">A-</button>
+    <button onclick="alternarContrasteNativo()" class="w-8 h-8 rounded-lg bg-forest-900 text-cozy-bege hover:bg-forest-600 flex items-center justify-center" title="Contraste Premium"><i data-lucide="contrast" class="w-4 h-4"></i></button>
+  </div>
+  <button onclick="document.getElementById('box-accessibility').classList.toggle('hidden')" class="w-10 h-10 rounded-full bg-forest-600 text-forest-950 flex items-center justify-center shadow-lg hover:scale-105 transition-transform" title="Acessibilidade">
+    <i data-lucide="accessibility" class="w-5 h-5"></i>
+  </button>
+</div>
+
+<script>
+  let tamanhoBaseFonte = 100; // Porcentagem inicial
+  
+  function ajustarFonteLeitura(direcao) {
+    tamanhoBaseFonte += (direcao * 5);
+    document.documentElement.style.fontSize = `${tamanhoBaseFonte}%`;
+  }
+  
+  function alternarContrasteNativo() {
+    const html = document.documentElement;
+    if (html.style.filter === 'contrast(1.4) brightness(0.95)') {
+      html.style.filter = 'none';
+    } else {
+      html.style.filter = 'contrast(1.4) brightness(0.95)';
+    }
+  }
+
+  let currentUser = null;
+  let chartInstance = null;
+
+  window.addEventListener('DOMContentLoaded', () => {
+    lucide.createIcons();
+    const session = localStorage.getItem('fabulas_session');
+    if (session) {
+      currentUser = JSON.parse(session);
+      entrarNoApp();
+    }
+  });
+
+  function showToast(message, type = 'success') {
+    const container = document.getElementById('toast-container');
+    if (!container) return;
+    const toast = document.createElement('div');
+    toast.className = `cozy-glass p-4 rounded-xl text-xs border flex items-center gap-3 transition-all duration-300 min-w-[280px]`;
+    toast.classList.add(type === 'success' ? 'border-emerald-500/30' : 'border-red-500/30');
+    toast.innerHTML = `<span>${message}</span>`;
+    container.appendChild(toast);
+    setTimeout(() => toast.remove(), 4000);
+  }
+
+  function toggleAuthForms(showCadastro) {
+    document.getElementById('form-login').classList.toggle('hidden', showCadastro);
+    document.getElementById('form-cadastro').classList.toggle('hidden', !showCadastro);
+  }
+
+  function setButtonLoading(buttonId, isLoading, textDefault) {
+    const btn = document.getElementById(buttonId);
+    if (btn) {
+      btn.disabled = isLoading;
+      btn.innerHTML = isLoading ? `<div class="loader"></div>` : textDefault;
+    }
+    lucide.createIcons();
+  }
+
+  function handleCadastro(e) {
+    e.preventDefault();
+    setButtonLoading('btn-cadastro-submit', true, '');
+
+    const data = {
+      nome: document.getElementById('cad-nome').value,
+      nickname: document.getElementById('cad-nick').value,
+      email: document.getElementById('cad-email').value,
+      senha: document.getElementById('cad-senha').value,
+      tipo_usuario: document.getElementById('cad-tipo').value
+    };
+
+    google.script.run
+      .withSuccessHandler(function(response) {
+        setButtonLoading('btn-cadastro-submit', false, '<span>Consolidar Cadastro</span>');
+        const r = typeof response === 'string' ? JSON.parse(response) : response;
+        
+        if (r.success) {
+          showToast(r.message, "success");
+          document.getElementById('js-cadastro-form').reset();
+          
+          if (data.tipo_usuario === 'Leitor') {
+            google.script.run.withSuccessHandler(function(url) {
+              window.top.location.href = url + "?visao=leitor";
+            }).getAppUrl();
+            return;
+          }
+          
+          toggleAuthForms(false);
+        } else {
+          showToast(r.message, "error");
+        }
+      })
+      .withFailureHandler(function(err) {
+        setButtonLoading('btn-cadastro-submit', false, '<span>Consolidar Cadastro</span>');
+        showToast("Falha estrutural: " + err.message, "error");
+      })
+      .cadastrarUsuario(data);
+  }
+
+  function handleLogin(e) {
+    e.preventDefault();
+    setButtonLoading('btn-login-submit', true, '');
+
+    const data = {
+      email: document.getElementById('login-email').value,
+      senha: document.getElementById('login-senha').value
+    };
+
+    google.script.run
+      .withSuccessHandler(function(response) {
+        setButtonLoading('btn-login-submit', false, '<span>Iniciar Jornada</span>');
+        const r = typeof response === 'string' ? JSON.parse(response) : response;
+        
+        if (r.success) {
+          currentUser = r.user;
+          localStorage.setItem('fabulas_session', JSON.stringify(currentUser));
+          
+          if (currentUser.tipo === 'Leitor') {
+            showToast("Acessando Espaço de Leitura...", "success");
+            
+            google.script.run.withSuccessHandler(function(url) {
+              window.top.location.href = url + "?visao=leitor";
+            }).getAppUrl();
+            
+            return;
+          }
+          
+          entrarNoApp();
+          showToast("Seja bem-vindo de volta!", "success");
+        } else {
+          showToast(r.message, "error");
+        }
+      })
+      .withFailureHandler(function(err) {
+        setButtonLoading('btn-login-submit', false, '<span>Iniciar Jornada</span>');
+        showToast("Erro na clareira: " + err.message, "error");
+      })
+      .loginUsuario(data);
+  }
+
+  function entrarNoApp() {
+    document.getElementById('auth-screen').classList.add('hidden');
+    document.getElementById('main-app').classList.remove('hidden');
+    
+    document.getElementById('user-name-side').innerText = currentUser.nome;
+    document.getElementById('user-role-side').innerText = currentUser.tipo;
+    document.getElementById('welcome-user-name').innerText = currentUser.nome;
+    
+    document.getElementById('prof-nome').value = currentUser.nome;
+    document.getElementById('prof-nick').value = currentUser.nickname || '';
+    document.getElementById('prof-bio').value = currentUser.bio || '';
+    
+    switchTab('dashboard');
+    sincronizarDashboard();
+  }
+
+  function logout() {
+    localStorage.removeItem('fabulas_session');
+    document.getElementById('main-app').classList.add('hidden');
+    document.getElementById('auth-screen').classList.remove('hidden');
+  }
+
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+    document.querySelectorAll('nav button').forEach(btn => btn.classList.remove('sidebar-active'));
+    
+    document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+    document.getElementById(`nav-${tabId}`).classList.add('sidebar-active');
+  }
+
+  function sincronizarDashboard() {
+    google.script.run
+      .withSuccessHandler(function(data) {
+        document.getElementById('metric-views').innerText = data.metricas.visualizacoes.toLocaleString();
+        document.getElementById('metric-sales').innerText = data.metricas.vendas.toLocaleString();
+        document.getElementById('metric-revenue').innerText = `R$ ${data.metricas.receita.toFixed(2)}`;
+        
+        if (document.getElementById('metric-royalties-real')) {
+          document.getElementById('metric-royalties-real').innerText = `R$ ${data.metricas.receita.toFixed(2)}`;
+        }
+        
+        const tableBody = document.getElementById('table-dashboard-books');
+        tableBody.innerHTML = '';
+        const grid = document.getElementById('grid-livros-catalogo');
+        grid.innerHTML = '';
+
+        if (data.livros.length === 0) {
+          tableBody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-forest-500">Nenhum livro cadastrado.</td></tr>`;
+        } else {
+          data.livros.forEach(livro => {
+            tableBody.innerHTML += `
+              <tr class="border-b border-forest-900/60 text-xs text-forest-200">
+                <td class="p-4 font-mono">${livro.id}</td>
+                <td class="p-4 font-medium text-cozy-bege">${livro.titulo}</td>
+                <td class="p-4">${livro.genero}</td>
+                <td class="p-4">${livro.status}</td>
+                <td class="p-4 text-right font-mono">R$ ${Number(livro.preco).toFixed(2)}</td>
+              </tr>
+            `;
+            grid.innerHTML += `
+              <div class="bg-forest-900/30 border border-forest-800/60 p-5 rounded-2xl">
+                <h4 class="font-serif text-lg font-bold text-cozy-bege">${livro.titulo}</h4>
+                <p class="text-xs text-forest-400 font-mono mt-1">${livro.genero} — R$ ${Number(livro.preco).toFixed(2)}</p>
+              </div>
+            `;
+          });
+        }
+        inicializarGrafico(data.metricas);
+      })
+      .buscarDadosDashboard(currentUser.id);
+  }
+
+  function inicializarGrafico(m) {
+    const ctx = document.getElementById('chart-performance');
+    if (!ctx) return;
+    if (chartInstance) chartInstance.destroy();
+
+    chartInstance = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai'],
+        datasets: [{ label: 'Performance', data: [0, m.visualizacoes/2, m.visualizacoes], borderColor: '#7fa48f', tension: 0.4 }]
+      },
+      options: { responsive: true, maintainAspectRatio: false }
+    });
+  }
+
+  document.getElementById('pub-genero').addEventListener('change', function(e) {
+    if (e.target.value === '__NOVO__') {
+      const novoGenero = prompt("Digite o nome do novo gênero literário:");
+      if (novoGenero && novoGenero.trim() !== "") {
+        const select = e.target;
+        
+        const option = document.createElement('option');
+        option.value = novoGenero.trim();
+        option.textContent = novoGenero.trim();
+        select.insertBefore(option, select.firstChild);
+        select.value = novoGenero.trim();
+        
+        google.script.run
+          .withSuccessHandler(function(response) {
+            if(response.success) showToast("Novo gênero catalogado!", "success");
+          })
+          .salvarGeneroCustom(novoGenero.trim());
+      } else {
+        e.target.value = e.target.options[0].value;
+      }
+    }
+  });
+
+  function handlePublicarLivro(e) {
+    e.preventDefault();
+    
+    const preco = parseFloat(document.getElementById('pub-preco').value) || 0;
+    const status = document.getElementById('pub-status').value;
+    
+    if (status === "Em Rascunho" && preco > 0) {
+      alert("Inconsistência na obra: Um livro 'Em Rascunho' não pode possuir um preço de venda ativo. Altere o status para 'Publicado' ou defina o preço como R$ 0,00.");
+      return;
+    }
+
+    setButtonLoading('btn-publicar-submit', true, '');
+
+    const data = {
+      id_autor: currentUser.id,
+      titulo: document.getElementById('pub-titulo').value,
+      genero: document.getElementById('pub-genero').value,
+      preco: preco,
+      status: status,
+      sinopse: document.getElementById('pub-sinopse').value
+    };
+
+    google.script.run
+      .withSuccessHandler(function() {
+        setButtonLoading('btn-publicar-submit', false, '<span>Gravar Linha na Planilha</span>');
+        showToast("Livro inserido!", "success");
+        document.getElementById('js-publicar-form').reset();
+        sincronizarDashboard();
+        switchTab('dashboard');
+      })
+      .publicarLivro(data);
+  }
+
+  function handleSalvarPerfil(e) {
+    e.preventDefault();
+    setButtonLoading('btn-perfil-submit', true, '');
+
+    const data = {
+      id: currentUser.id,
+      nome: document.getElementById('prof-nome').value,
+      nickname: document.getElementById('prof-nick').value,
+      bio: document.getElementById('prof-bio').value,
+      foto: document.getElementById('prof-foto').value
+    };
+
+    google.script.run
+      .withSuccessHandler(function() {
+        setButtonLoading('btn-perfil-submit', false, '<span>Sincronizar Perfil</span>');
+        currentUser.nome = data.nome;
+        currentUser.nickname = data.nickname;
+        currentUser.bio = data.bio;
+        currentUser.foto = data.foto;
+        localStorage.setItem('fabulas_session', JSON.stringify(currentUser));
+        entrarNoApp();
+        showToast("Perfil updated!", "success");
+      })
+      .salvarPerfil(data);
+  }
+</script>
+</body>
+</html>
