@@ -1,14 +1,15 @@
 <h1> Fábulas</h1>
 <h2>Plataforma de Publicação e Leitura Independente</h2>
 
-# Fábulas — Plataforma Premium de Publicação e Leitura Independente
+  ![login](imgs/login.png)
 
 O **Fábulas** é uma plataforma web conceitual de duas pontas desenvolvida para conectar autores independentes e leitores em um ecossistema focado na experiência do usuário. Inspirado em interfaces modernas como Kindle, Substack e Wattpad, o projeto adota uma estética *aconchegante* (minimalista, tons de floresta e natureza) com foco em imersão, acessibilidade e regras de negócio robustas.
 
 O sistema utiliza **HTML5, CSS3, JavaScript (ES6+)** no front-end, utilizando o **Google Apps Script** como camada de microsserviços (API/Roteador) e o **Google Sheets** como banco de dados relacional simulado.
 
 ---
-
+ ![tela inicial](imgs/publishbook.png)
+ 
 ## Tecnologias Utilizadas
 
 * **Front-end:**
@@ -23,9 +24,15 @@ O sistema utiliza **HTML5, CSS3, JavaScript (ES6+)** no front-end, utilizando o 
 ## Funcionalidades
 
 ### Ecossistema do Autor (Dashboard SaaS)
+
 * **Estante de Criação:** Criação e acompanhamento de manuscritos com barras de progresso dinâmicas.
+* 
+*  
 * **Métricas Financeiras Integradas:** Painel com cálculo real de Leitores Ativos, Minutos Lidos, Avaliação Média e Royalties Líquidos.
+*  ![dashboard](imgs/dashboard.png)
 * **Gerenciamento de Gêneros Dinâmicos:** Opção de expandir o banco de dados criando gêneros customizados em tempo real, sem necessidade de manutenção no código.
+*  ![genders](imgs/publishbook.png)
+   
 
 ---
 
