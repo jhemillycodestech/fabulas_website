@@ -38,6 +38,9 @@ O sistema utiliza **HTML5, CSS3, JavaScript (ES6+)** no front-end, utilizando o 
 
 <h2>Arquitetura e Engenharia de Software</h2>
 
+### *Nota sobre a Infraestrutura (Serverless Conceitual)
+**A opção pelo ecossistema Google (Apps Script e Sheets) foi uma decisão estratégica de arquitetura para este MVP. Ao utilizar o Google Sheets como um banco NoSQL/Relacional simulado através de chamadas de microsserviços via Apps Script, a plataforma atinge custo zero de infraestrutura e hospedagem, mantendo a reatividade dos dados. Essa abordagem simula o comportamento de arquiteturas modernas Serverless e demonstra a viabilidade de validações complexas mesmo em ambientes de restrição de recursos.**
+
 ### Motor de Regras de Negócio (Validation Engine)
 Para garantir a integridade comercial da plataforma, o sistema conta com um motor de regras estrito no front-end e back-end:
 * **Bloqueio de Monetização:** É vedada a venda de obras em rascunho. Caso o autor estipule um preço maior que R$ 0,00, a aplicação valida a requisição e força o status do livro para "Finalizado". Tentativas de burlar a interface bloqueiam o envio do formulário.
